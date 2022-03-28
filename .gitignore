@@ -1,0 +1,14 @@
+# Node modules
+node_modules
+
+# Tests output
+coverage
+.nyc_output
+.idea/
+
+# New relic
+newrelic_agent.log
+
+# Docker compose secrets
+secrets.yml
+docker-compose.private.yml
