@@ -9,7 +9,7 @@ services:
     expose:
       - 80
     ports:
-      - "8080:80"
+      - "8080:80" # for debugging [vm 80] => [host 8080]
     networks:
       default:
         aliases:
@@ -20,6 +20,8 @@ services:
     restart: always
     depends_on:
       - database
+    volumes:
+      - ./api:/app
     healthcheck:
       test: node healthcheck.js || exit 1
       interval: 20s
@@ -27,7 +29,7 @@ services:
       retries: 5
       start_period: 15s
     environment:
-      # VIRTUAL_PORT: 80
+      # VIRTUAL_PORT: 80 # default is 80
       HOST: 0.0.0.0
       PORT: 80
       DB_CONNECTION: pg
@@ -38,6 +40,31 @@ services:
       VIRTUAL_HOST: api.amanze.local
       DB_PASSWORD: database_password
       APP_KEY: random_128_bit_string
+
+  ui:
+    image: stock/ui:${env}
+    build:
+      context: ./ui
+    container_name: stock-ui
+    expose:
+      - 3000 # must be the same as App-Port and VIRTUAL_PORT
+    ports:
+      - "3000:3000" # for local debugging
+    depends_on:
+      - api
+    volumes:
+      - ./ui:/app
+    networks:
+      default:
+        aliases:
+          - ui.amanze.local
+      proxy:
+        aliases:
+          - ui.amanze.local
+    environment:
+      VIRTUAL_PORT: 3000
+      VIRTUAL_HOST: ui.amanze.local
+      VUE_APP_ENVIRONMENT: local
 
   database:
     image: postgres:11.6-alpine

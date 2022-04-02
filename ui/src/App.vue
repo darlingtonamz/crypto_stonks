@@ -8,12 +8,17 @@ import TheWelcome from './components/TheWelcome.vue'
     <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <HelloWorld
+      msg="Assets"
+      :assets=assets
+      v-on:assetSelected="assetSelected" />
     </div>
   </header>
 
   <main>
-    <TheWelcome />
+    <TheWelcome
+    :assets=assets
+    :selected=selectedAsset />
   </main>
 </template>
 
@@ -79,3 +84,40 @@ a,
   }
 }
 </style>
+<script>
+import { get } from 'axios';
+export default {
+  data() {
+    return {
+      apiHost: 'api.amanze.local',
+      assets: [],
+      selectedAsset: null,
+    }
+  },
+  methods: {
+    getCryptoSymbols() {
+      // fetch({
+      //   method: 'GET',
+      //   url: '${apiHost}/assets'
+      // })
+      get(`http://${this.apiHost}/assets`)
+      .then((res) => {
+        // console.log('###################', { res });
+        this.assets = res.data;
+      })
+    },
+    assetSelected(target) {
+      console.log('###################', { target });
+      this.selectedAsset = target
+    }
+  },
+  mounted() {
+    console.log(`The initial count is ${this.count}.`)
+    const socket = new WebSocket(`ws://${this.apiHost}/ws`);
+    socket.onmessage = ({data}) => {
+      console.log('Message from server', data.toString());
+    }
+    this.getCryptoSymbols();
+  }
+}
+</script>

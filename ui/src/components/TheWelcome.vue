@@ -5,21 +5,36 @@ import ToolingIcon from './icons/IconTooling.vue'
 import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
+defineProps({
+  selected: {
+    type: Object,
+    required: false
+  },
+  assets: {
+    type: [String],
+    default: []
+  }
+})
 </script>
 
 <template>
-  <WelcomeItem>
-    <template #icon>
-      <DocumentationIcon />
-    </template>
-    <template #heading>Documentation</template>
+  <div>
+    <WelcomeItem v-for="asset of assets"
+    :key="asset.id"
+    >
+      <template #icon>
+        <DocumentationIcon />
+      </template>
+      <template #heading>{{asset.symbol}}</template>
 
-    Vue’s
-    <a target="_blank" href="https://vuejs.org/">official documentation</a>
-    provides you with all information you need to get started.
-  </WelcomeItem>
+      Vue’s
+      <a target="_blank" href="https://vuejs.org/">official documentation</a>
+      provides you with all information you need to get started.
+    </WelcomeItem>
 
-  <WelcomeItem>
+  </div>
+
+  <!-- <WelcomeItem>
     <template #icon>
       <ToolingIcon />
     </template>
@@ -80,5 +95,33 @@ import SupportIcon from './icons/IconSupport.vue'
     As an independent project, Vue relies on community backing for its sustainability. You can help
     us by
     <a target="_blank" href="https://vuejs.org/sponsor/">becoming a sponsor</a>.
-  </WelcomeItem>
+  </WelcomeItem> -->
 </template>
+<script>
+import { get } from 'axios';
+export default {
+  data() {
+    return {
+      apiHost: 'api.amanze.local',
+      prices: []
+    }
+  },
+  watch: {
+    selected: function() {
+      this.getPrices();
+    }
+  },
+  methods: {
+    getPrices() {
+      const fsyms = this.selected.symbol;
+      const tsyms = this.assets.map((asset) => asset.symbol).join(',');
+      get(`http://${this.apiHost}/price?fsyms=${fsyms}&tsym=${tsyms}`)
+        .then((res) => {
+          console.log('###################', { res });
+          this.prices = res.data;
+        })
+    }
+  },
+  mounted() {}
+}
+</script>

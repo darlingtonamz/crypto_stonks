@@ -40,17 +40,34 @@ function build(appOptions = {}) {
     for (const module of exports.appModules) {
         controllers = controllers.concat(module.controllers);
     }
+    server.register(require('fastify-websocket'), {
+        options: { maxPayload: 1048576 }
+    });
     server.register(fastify_decorators_1.bootstrap, {
         controllers
     });
     server.get('/health', {}, () => __awaiter(this, void 0, void 0, function* () {
         return { pong: 'it worked!' };
     }));
+    server.route({
+        method: 'GET',
+        url: '/ws',
+        handler: (_, reply) => {
+            reply.send({ hello: 'world' });
+        },
+        wsHandler: (conn) => {
+            conn.setEncoding('utf8');
+            conn.write('hello client');
+            conn.once('data', () => {
+                conn.end();
+            });
+        }
+    });
     server.register(fastify_schedule_1.fastifySchedule);
     const task = new toad_scheduler_1.AsyncTask('simple task', () => __awaiter(this, void 0, void 0, function* () {
         const result = (yield server.inject({
             method: 'POST',
-            url: '/price?fsyms=BTC,LINK,MKR',
+            url: '/price',
             payload: {
                 from: ['BTC', 'LINK', 'MKR', 'USD', 'EUR', 'ETH', 'LTC'],
                 to: []

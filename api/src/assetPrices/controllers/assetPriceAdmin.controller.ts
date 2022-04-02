@@ -1,3 +1,4 @@
+import { FastifyRequest } from 'fastify';
 import { Controller, GET, POST } from 'fastify-decorators';
 import { AssetPricesService } from '../providers/assetPrices.service';
 
@@ -7,19 +8,26 @@ export class AssetPriceAdminController {
 
   @GET('/')
   async getAssetPrices(
-    { query }: { query: any }
+    { query }: FastifyRequest<{
+      'Querystring': {
+        fsyms: string,
+        tsyms: string,
+      }
+    }>
   ) {
     // return this.service.deleteAllAssetPrices();
     // return {
     //   data: 'price coming soon',
     //   query
     // };
-    return this.service.fetchAndUpdateAssetPrices(query.fsyms, query.tsyms)
+    return this.service.fetchAndUpdateAssetPrices(query.fsyms as any, query.tsyms)
   }
   
   @POST('/')
   async syncAssetPrices(
-    { body }: { body: any }
+    { body }: FastifyRequest<{
+      'Body': { from: string[], to: string[] }
+    }>
   ) {
     // return this.service.deleteAllAssetPrices();
     // return {

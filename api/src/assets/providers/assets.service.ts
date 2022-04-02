@@ -49,6 +49,10 @@ export class AssetsService {
     );
   }
 
+  public async getManyAssets(): Promise<AssetEntity[]> {
+    return this.repository.find();
+  }
+
   public async getAssetsBySymbols(symbols: string[]) {
     return this.repository.find({
       symbol: In(symbols),

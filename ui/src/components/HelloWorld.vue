@@ -3,6 +3,10 @@ defineProps({
   msg: {
     type: String,
     required: true
+  },
+  assets: {
+    type: [String],
+    default: []
   }
 })
 </script>
@@ -15,6 +19,19 @@ defineProps({
       <a target="_blank" href="https://vitejs.dev/">Vite</a> +
       <a target="_blank" href="https://vuejs.org/">Vue 3</a>.
     </h3>
+    <div>
+      <select v-model="selected">
+        <!-- <div v-for="asset of assets"
+          :key="asset.id"
+        >{{asset.symbol}}</div> -->
+        <option v-for="asset of assets"
+          :key="asset.id"
+          :value=asset
+        >{{asset.symbol}}
+
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 
@@ -41,3 +58,25 @@ h3 {
   }
 }
 </style>
+<script>
+export default {
+  data() {
+    return {
+      selected: null
+    }
+  },
+  watch: {
+    selected: function (val) {
+      this.assetSelected(val);
+    }
+  },
+  methods: {
+    assetSelected(value) {
+      if (value) {
+        this.$emit('assetSelected', value);
+      }
+    }
+  },
+  mounted() {}
+}
+</script>

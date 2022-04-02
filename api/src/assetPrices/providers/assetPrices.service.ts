@@ -19,6 +19,9 @@ import { AssetsService } from '../../assets/providers/assets.service';
 @Service()
 export class AssetPricesService {
   private repository!: Repository<AssetPriceEntity>;
+
+  private isSyncing = false;
+  private lastSynced: number;
   
   @Inject(AssetsService)
   private assetsService!: AssetsService;
@@ -59,46 +62,58 @@ export class AssetPricesService {
     // AssetPriceEntity[]
     any
   > {
-    fromSymbols = fromSymbols.map((str) => str.trim().toUpperCase());
-    toSymbols = toSymbols.map((str) => str.trim().toUpperCase());
-
-    if (fromSymbols && fromSymbols.length) {
-      // fallback - if there are no to symbols supplied, use the one from "from"
-      if (!toSymbols || !toSymbols.length) {
-        toSymbols = [...fromSymbols];
-      }
-    }
-
     let output;
-
-    try {
-      const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${
-        fromSymbols.join(',')
-      }&tsyms=${
-        toSymbols.join(',')
-      }`;
   
-      const result = await axios.get(url);
-      const assetsMap: IAssetMap = result.data.RAW;
-      const assetPriceMap: IAssetPriceMap = {};
-      // console.log('%%%%%%%%%%%', { assetsMap, url })
-      Object.keys(assetsMap).forEach((fromAssetKey: string) => {
-        const fromAssetMap = assetsMap[fromAssetKey];
-        return Object.keys(fromAssetMap).forEach((toAssetKey: string) => {
-          const toAssetMap = fromAssetMap[toAssetKey];
-          assetPriceMap[`${fromAssetKey}-${toAssetKey}`] = toAssetMap.PRICE;
-        });
-      });
-      // console.log({ url, assetPriceMap, result: result.data })
-      await this.cacheAssetPrices(assetPriceMap);
-      output = await this.getManyAssetPrices({
-        where: {
-          symbol: In(Object.keys(assetPriceMap))
+    if (!this.isSyncing) {
+      this.isSyncing = true;
+      const now = new Date().getTime();
+      console.log({
+        isSyncing: this.isSyncing,
+        lastSynced: this.lastSynced,
+        ago: `${(now - (this.lastSynced || now)) / 1000}secs`
+      })
+      fromSymbols = fromSymbols.map((str) => str.trim().toUpperCase());
+      toSymbols = toSymbols.map((str) => str.trim().toUpperCase());
+  
+      if (fromSymbols && fromSymbols.length) {
+        // fallback - if there are no to symbols supplied, use the one from "from"
+        if (!toSymbols || !toSymbols.length) {
+          toSymbols = [...fromSymbols];
         }
-      });;
-    } catch (error) {
-      console.warn(error);
+      }
+  
+      try {
+        const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${
+          fromSymbols.join(',')
+        }&tsyms=${
+          toSymbols.join(',')
+        }`;
+    
+        const result = await axios.get(url);
+        const assetsMap: IAssetMap = result.data.RAW;
+        const assetPriceMap: IAssetPriceMap = {};
+        // console.log('%%%%%%%%%%%', { assetsMap, url })
+        Object.keys(assetsMap).forEach((fromAssetKey: string) => {
+          const fromAssetMap = assetsMap[fromAssetKey];
+          return Object.keys(fromAssetMap).forEach((toAssetKey: string) => {
+            const toAssetMap = fromAssetMap[toAssetKey];
+            assetPriceMap[`${fromAssetKey}-${toAssetKey}`] = toAssetMap.PRICE;
+          });
+        });
+        // console.log({ url, assetPriceMap, result: result.data })
+        await this.cacheAssetPrices(assetPriceMap);
+        output = await this.getManyAssetPrices({
+          where: {
+            symbol: In(Object.keys(assetPriceMap))
+          }
+        });
+        this.lastSynced = new Date().getTime();
+      } catch (error) {
+        console.warn(error);
+      }
+      this.isSyncing = false;
     }
+
     return output
   }
 

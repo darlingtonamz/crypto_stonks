@@ -1,5 +1,5 @@
 import {
-  FastifyReply,
+  FastifyReply, FastifyRequest,
   // FastifyRequest
 } from 'fastify';
 import { Controller, GET, POST } from 'fastify-decorators';
@@ -16,16 +16,21 @@ export class AssetsController {
     },
   })
   async createOne(
-    { body }: { body: CreateAssetDTO },
+    { body }: FastifyRequest<{ 'Body': CreateAssetDTO }>,
     reply: FastifyReply
   ) {
     reply.status(201)
     return this.service.createOneAsset(body);
   }
 
+  @GET('/')
+  async getManyAssets() {
+    return this.service.getManyAssets();
+  }
+
   @GET('/:symbol')
-  async getAssetUsingSymbol(
-    { params }: { params: any }
+  async getManyAssetUsingSymbol(
+    { params }: FastifyRequest<{ 'Params': { symbol: string } }>
   ) {
     return { params };
   }

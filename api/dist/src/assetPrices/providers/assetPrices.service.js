@@ -29,6 +29,7 @@ const assets_service_1 = require("../../assets/providers/assets.service");
 let AssetPricesService = class AssetPricesService {
     constructor(connectionService) {
         this.connectionService = connectionService;
+        this.isSyncing = false;
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -57,36 +58,46 @@ let AssetPricesService = class AssetPricesService {
     }
     syncAndUpdateAssetPrices(fromSymbols, toSymbols) {
         return __awaiter(this, void 0, void 0, function* () {
-            fromSymbols = fromSymbols.map((str) => str.trim().toUpperCase());
-            toSymbols = toSymbols.map((str) => str.trim().toUpperCase());
-            if (fromSymbols && fromSymbols.length) {
-                if (!toSymbols || !toSymbols.length) {
-                    toSymbols = [...fromSymbols];
-                }
-            }
             let output;
-            try {
-                const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${fromSymbols.join(',')}&tsyms=${toSymbols.join(',')}`;
-                const result = yield axios_1.default.get(url);
-                const assetsMap = result.data.RAW;
-                const assetPriceMap = {};
-                Object.keys(assetsMap).forEach((fromAssetKey) => {
-                    const fromAssetMap = assetsMap[fromAssetKey];
-                    return Object.keys(fromAssetMap).forEach((toAssetKey) => {
-                        const toAssetMap = fromAssetMap[toAssetKey];
-                        assetPriceMap[`${fromAssetKey}-${toAssetKey}`] = toAssetMap.PRICE;
-                    });
+            if (!this.isSyncing) {
+                this.isSyncing = true;
+                const now = new Date().getTime();
+                console.log({
+                    isSyncing: this.isSyncing,
+                    lastSynced: this.lastSynced,
+                    ago: `${(now - (this.lastSynced || now)) / 1000}secs`
                 });
-                yield this.cacheAssetPrices(assetPriceMap);
-                output = yield this.getManyAssetPrices({
-                    where: {
-                        symbol: typeorm_1.In(Object.keys(assetPriceMap))
+                fromSymbols = fromSymbols.map((str) => str.trim().toUpperCase());
+                toSymbols = toSymbols.map((str) => str.trim().toUpperCase());
+                if (fromSymbols && fromSymbols.length) {
+                    if (!toSymbols || !toSymbols.length) {
+                        toSymbols = [...fromSymbols];
                     }
-                });
-                ;
-            }
-            catch (error) {
-                console.warn(error);
+                }
+                try {
+                    const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${fromSymbols.join(',')}&tsyms=${toSymbols.join(',')}`;
+                    const result = yield axios_1.default.get(url);
+                    const assetsMap = result.data.RAW;
+                    const assetPriceMap = {};
+                    Object.keys(assetsMap).forEach((fromAssetKey) => {
+                        const fromAssetMap = assetsMap[fromAssetKey];
+                        return Object.keys(fromAssetMap).forEach((toAssetKey) => {
+                            const toAssetMap = fromAssetMap[toAssetKey];
+                            assetPriceMap[`${fromAssetKey}-${toAssetKey}`] = toAssetMap.PRICE;
+                        });
+                    });
+                    yield this.cacheAssetPrices(assetPriceMap);
+                    output = yield this.getManyAssetPrices({
+                        where: {
+                            symbol: typeorm_1.In(Object.keys(assetPriceMap))
+                        }
+                    });
+                    this.lastSynced = new Date().getTime();
+                }
+                catch (error) {
+                    console.warn(error);
+                }
+                this.isSyncing = false;
             }
             return output;
         });
