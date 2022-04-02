@@ -23,7 +23,14 @@ defineProps({
     :key="asset.id"
     >
       <template #icon>
-        <DocumentationIcon />
+        <img
+        v-if="asset"
+        alt="Asset logo"
+        style="object-fit: contain"
+        :src="`/src/assets/logos/${asset.symbol.toLowerCase()}.svg`"
+        width="30"
+        height="30"  fill="currentColor" />
+        <DocumentationIcon v-else />
       </template>
       <template #heading>
         
@@ -141,6 +148,17 @@ export default {
         })
     }
   },
-  mounted() {}
+  mounted() {
+    console.log(`The initial count is ${this.count}.`)
+    const socket = new WebSocket(`ws://${this.apiHost}/ws`);
+    socket.onmessage = ({data}) => {
+      console.log('Message from server', data);
+      if (typeof data === 'string') {
+        if (data === 'REFRESH_PRICES') {
+          this.getPrices();
+        }        
+      }
+    }
+  }
 }
 </script>

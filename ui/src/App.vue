@@ -5,7 +5,8 @@ import TheWelcome from './components/TheWelcome.vue'
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+    <img v-if="selectedAsset" alt="Vue logo" class="logo" :src="`/src/assets/logos/${selectedAsset.symbol.toLowerCase()}.svg`" width="125" height="125" />
+    <img v-else alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
       <HelloWorld
@@ -112,11 +113,6 @@ export default {
     }
   },
   mounted() {
-    console.log(`The initial count is ${this.count}.`)
-    const socket = new WebSocket(`ws://${this.apiHost}/ws`);
-    socket.onmessage = ({data}) => {
-      console.log('Message from server', data.toString());
-    }
     this.getCryptoSymbols();
   }
 }
