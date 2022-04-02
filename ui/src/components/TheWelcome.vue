@@ -25,11 +25,24 @@ defineProps({
       <template #icon>
         <DocumentationIcon />
       </template>
-      <template #heading>{{asset.symbol}}</template>
+      <template #heading>
+        
+        <span v-if="selected && selected.symbol && asset.symbol">
+            {{priceMap[`${selected.symbol}-${asset.symbol}`]}}
+        </span>
+        <span v-else>N/A</span>
+        {{ asset.symbol }}
+      </template>
 
-      Vue’s
-      <a target="_blank" href="https://vuejs.org/">official documentation</a>
-      provides you with all information you need to get started.
+      <span v-if="selected && selected.symbol && asset.symbol">
+        <!-- <div>
+          {{priceMap[`${selected.symbol}-${asset.symbol}`]}}
+        </div> -->
+        <div>
+          {{`${selected.symbol}-${asset.symbol}`}}
+        </div>
+      </span>
+      <span v-else> ... </span>
     </WelcomeItem>
 
   </div>
@@ -103,21 +116,27 @@ export default {
   data() {
     return {
       apiHost: 'api.amanze.local',
-      prices: []
+      prices: [],
+      priceMap: {}
     }
   },
   watch: {
     selected: function() {
       this.getPrices();
+    },
+    prices: function(prices) {
+      prices.forEach((priceObj) => {
+        this.priceMap[priceObj.symbol] = priceObj.price;
+      });
     }
   },
   methods: {
     getPrices() {
       const fsyms = this.selected.symbol;
       const tsyms = this.assets.map((asset) => asset.symbol).join(',');
-      get(`http://${this.apiHost}/price?fsyms=${fsyms}&tsym=${tsyms}`)
+      get(`http://${this.apiHost}/price?fsyms=${fsyms}&tsyms=${tsyms}`)
         .then((res) => {
-          console.log('###################', { res });
+          // console.log('###################', { res });
           this.prices = res.data;
         })
     }

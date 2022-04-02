@@ -20,7 +20,7 @@ defineProps({
       <a target="_blank" href="https://vuejs.org/">Vue 3</a>.
     </h3>
     <div>
-      <select v-model="selected">
+      <select v-model="selected" class='asset-picker'>
         <!-- <div v-for="asset of assets"
           :key="asset.id"
         >{{asset.symbol}}</div> -->
@@ -50,6 +50,14 @@ h3 {
 .greetings h3 {
   text-align: center;
 }
+.asset-picker {
+  font-size: 3em;
+  border: #eee 1px solid;
+  border-radius: 5px;
+  box-shadow: 0px 5px 10px -5px #40b883;
+  color: #34495e;
+  padding: 5px 10px;;
+}
 
 @media (min-width: 1024px) {
   .greetings h1,
@@ -68,6 +76,11 @@ export default {
   watch: {
     selected: function (val) {
       this.assetSelected(val);
+    },
+    assets: function (val) {
+      if (!this.selected && val && val.length) {
+        this.selected = val[0];
+      }
     }
   },
   methods: {
