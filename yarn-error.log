@@ -1,0 +1,36 @@
+Arguments: 
+  /home/amanze/.nvm/versions/node/v12.20.2/bin/node /home/amanze/.nvm/versions/node/v12.20.2/bin/yarn init vue@latest
+
+PATH: 
+  /home/amanze/.vscode-server/bin/c722ca6c7eed3d7987c0d5c3df5c45f6b15e77d1/bin/remote-cli:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/home/amanze/.local/bin:/home/amanze/Downloads/google-cloud-sdk/bin:/home/amanze/.nvm/versions/node/v12.20.2/bin:/home/amanze/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  12.20.2
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/home/amanze/.nvm/versions/node/v12.20.2/lib/node_modules/yarn/lib/cli.js:136216:13)
+      at Interface.emit (events.js:314:20)
+      at Interface._ttyWrite (readline.js:868:16)
+      at ReadStream.onkeypress (readline.js:205:10)
+      at ReadStream.emit (events.js:314:20)
+      at emitKeys (internal/readline/utils.js:335:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1137:36)
+      at ReadStream.emit (events.js:314:20)
+      at addChunk (_stream_readable.js:297:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

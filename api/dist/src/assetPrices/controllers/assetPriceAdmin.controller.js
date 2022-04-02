@@ -32,7 +32,6 @@ let AssetPriceAdminController = class AssetPriceAdminController {
     }
     syncAssetPrices({ body }) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('%%%%%%%%%%%', { body });
             return this.service.syncAndUpdateAssetPrices(body.from, body.to);
         });
     }

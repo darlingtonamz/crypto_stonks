@@ -26,7 +26,7 @@ export class AssetPriceAdminController {
     //   data: 'price coming soon',
     //   query
     // };
-    console.log('%%%%%%%%%%%', { body })
+    // console.log('%%%%%%%%%%%', { body })
     return this.service.syncAndUpdateAssetPrices(body.from, body.to)
   }
 }
