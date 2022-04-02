@@ -1,15 +1,22 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import AssetPricePicker from './components/AssetPricePicker.vue'
+import AssetPriceViewer from './components/AssetPriceViewer.vue'
 </script>
 
 <template>
   <header>
-    <img v-if="selectedAsset" alt="Vue logo" class="logo" :src="`/src/assets/logos/${selectedAsset.symbol.toLowerCase()}.svg`" width="125" height="125" />
+    <img
+    v-if="selectedAsset"
+    alt="Vue logo"
+    style="object-fit: contain"
+    class="logo"
+    :src="`/src/assets/logos/${selectedAsset.symbol.toLowerCase()}.svg`"
+    width="125"
+    height="125" />
     <img v-else alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld
+      <AssetPricePicker
       msg="Assets"
       :assets=assets
       v-on:assetSelected="assetSelected" />
@@ -17,7 +24,7 @@ import TheWelcome from './components/TheWelcome.vue'
   </header>
 
   <main>
-    <TheWelcome
+    <AssetPriceViewer
     :assets=assets
     :selected=selectedAsset />
   </main>
@@ -97,10 +104,6 @@ export default {
   },
   methods: {
     getCryptoSymbols() {
-      // fetch({
-      //   method: 'GET',
-      //   url: '${apiHost}/assets'
-      // })
       get(`http://${this.apiHost}/assets`)
       .then((res) => {
         // console.log('###################', { res });
@@ -108,7 +111,7 @@ export default {
       })
     },
     assetSelected(target) {
-      console.log('###################', { target });
+      // console.log('###################', { target });
       this.selectedAsset = target
     }
   },
