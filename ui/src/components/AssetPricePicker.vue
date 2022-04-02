@@ -19,9 +19,6 @@ defineProps({
     </h3>
     <div>
       <select v-model="selected" class='asset-picker'>
-        <!-- <div v-for="asset of assets"
-          :key="asset.id"
-        >{{asset.symbol}}</div> -->
         <option v-for="asset of assets"
           :key="asset.id"
           :value=asset

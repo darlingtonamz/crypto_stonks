@@ -3,18 +3,12 @@ import {
   Initializer,
   Inject,
   Service,
-  // Inject, 
 } from 'fastify-decorators';
 import axios from 'axios';
 import { uniq } from 'lodash';
-// import { CreateAssetPriceDTO } from '../dtos/assetPrice.dto';
 import { AssetPriceEntity } from '../entities/assetPrice.entity';
 import { ConnectionService } from '../../db/providers/connection.service';
 import { AssetsService } from '../../assets/providers/assets.service';
-
-// import { parse } from 'date-fns';
-// import { AssetsService } from '../../assets/providers/assets.service';
-// import { UsersService } from '../../users/providers/users.service';
 
 @Service()
 export class AssetPricesService {
@@ -25,9 +19,6 @@ export class AssetPricesService {
   
   @Inject(AssetsService)
   private assetsService!: AssetsService;
-
-  // @Inject(UsersService)
-  // private usersService!: UsersService;
 
   constructor(private connectionService: ConnectionService) {}
 
@@ -58,11 +49,8 @@ export class AssetPricesService {
   public async syncAndUpdateAssetPrices(
     fromSymbols: string[],
     toSymbols: string[],
-  ): Promise<
-    // AssetPriceEntity[]
-    any
-  > {
-    let output;
+  ): Promise<AssetPriceEntity[]> {
+    let output: AssetPriceEntity[] = [];
   
     if (!this.isSyncing) {
       this.isSyncing = true;
@@ -120,10 +108,7 @@ export class AssetPricesService {
   public async fetchAndUpdateAssetPrices(
     fromSymbolsText: string = '',
     toSymbolsText: string = '',
-  ): Promise<
-    // AssetPriceEntity[]
-    any
-  > {
+  ): Promise<AssetPriceEntity[]> {
     const fromSymbols: string[] = fromSymbolsText.split(',').map((str) => str.trim().toUpperCase());
     const toSymbols: string[] = toSymbolsText.split(',').map((str) => str.trim().toUpperCase());
 
@@ -133,30 +118,6 @@ export class AssetPricesService {
         toSymbols.push(fromSymbols[0])
       }
     }
-
-    // try {
-    //   const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${
-    //     fromSymbols.join(',')
-    //   }&tsyms=${
-    //     toSymbols.join(',')
-    //   }`;
-  
-    //   const result = await axios.get(url);
-    //   const assetsMap: IAssetMap = result.data.RAW;
-    //   const assetPriceMap: IAssetPriceMap = {};
-    //   Object.keys(assetsMap).forEach((fromAssetKey: string) => {
-    //     const fromAssetMap = assetsMap[fromAssetKey];
-    //     return Object.keys(fromAssetMap).forEach((toAssetKey: string) => {
-    //       const toAssetMap = fromAssetMap[toAssetKey];
-    //       assetPriceMap[`${fromAssetKey}-${toAssetKey}`] = toAssetMap.PRICE;
-    //     });
-    //   });
-    //   // console.log({ url, assetPriceMap, result: result.data })
-  
-    //   await this.cacheAssetPrices(assetPriceMap);
-    // } catch (error) {
-    //   console.warn(error);
-    // }
 
     const fromToSymbols: string[] = [];
     fromSymbols.forEach((fromSymbol) => {
@@ -176,7 +137,6 @@ export class AssetPricesService {
   // upsert assets and
   // cache the prices of assets relative to other assets
   private async cacheAssetPrices(assetPriceMap: IAssetPriceMap) {
-    // console.log('%%%%%%%%%%% 1')
     let symbols: string[] = [];
     let fromToPriceTexts: string[] = []
     Object.keys(assetPriceMap).forEach((key) => {
@@ -187,8 +147,7 @@ export class AssetPricesService {
         `'${fromKey}|${toKey}|${price}'`
       );
     });
-    // console.log('%%%%%%%%%%% 2')
-    // console.log('#################', { symbols, assetPriceMap })
+
     await this.assetsService.getAndUpsertAssetsBySymbols(symbols);
     await this.repository.query(`
       INSERT into asset_prices(symbol, "from", "to", price)
@@ -207,9 +166,6 @@ export class AssetPricesService {
               price = EXCLUDED.price,
               updated_at = now()
     `);
-    // console.log('%%%%%%%%%%% 3')
-
-
   }
 }
 

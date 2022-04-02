@@ -15,11 +15,6 @@ export class AssetPriceAdminController {
       }
     }>
   ) {
-    // return this.service.deleteAllAssetPrices();
-    // return {
-    //   data: 'price coming soon',
-    //   query
-    // };
     return this.service.fetchAndUpdateAssetPrices(query.fsyms as any, query.tsyms)
   }
   
@@ -29,12 +24,6 @@ export class AssetPriceAdminController {
       'Body': { from: string[], to: string[] }
     }>
   ) {
-    // return this.service.deleteAllAssetPrices();
-    // return {
-    //   data: 'price coming soon',
-    //   query
-    // };
-    // console.log('%%%%%%%%%%%', { body })
     return this.service.syncAndUpdateAssetPrices(body.from, body.to)
   }
 }
