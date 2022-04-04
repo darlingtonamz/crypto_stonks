@@ -60,6 +60,8 @@ export default {
       prices: [],
       priceMap: {},
       isRefreshingPrices: false,
+      lastPriceUpdateFromServer: null,
+      socket: null,
     }
   },
   watch: {
@@ -72,6 +74,11 @@ export default {
       });
     }
   },
+  computed: {
+    allPriceSymbols() {
+      return this.prices.map((obj) => obj.symbol);
+    }
+  },
   methods: {
     getPrices() {
       this.isRefreshingPrices = true;
@@ -81,22 +88,57 @@ export default {
         .then((res) => {
           this.prices = res.data;
           this.isRefreshingPrices = false;
+          // this.logServerForUpdatedPrice();
         })
         .catch((error) => {
           console.error(error);
           this.isRefreshingPrices = false;
         })
-    }
+    },
+    // logServerForUpdatedPrice() {
+    //   const now = new Date().getTime();
+    //   if (this.selected && (
+    //     !this.lastPriceUpdateFromServer || 
+    //     (now - this.lastPriceUpdateFromServer)/1000 > 3
+    //   )) {
+    //     // this.lastPriceUpdateFromServer = now;
+    //     console.log('SENDIONG')
+    //     this.socket.send(`HAS_UPDATE_FOR|${this.selected.symbol}`)
+    //   }
+    // }
   },
   mounted() {
     console.log(`The initial count is ${this.count}.`)
-    const socket = new WebSocket(`ws://${this.apiHost}/ws`);
-    socket.onmessage = ({data}) => {
-      console.log('Message from server', data);
-      if (typeof data === 'string') {
+    this.socket = new WebSocket(`ws://${this.apiHost}/ws`);
+    this.socket.onmessage = ({data}) => {
+      console.log('Message from server', data, typeof data, data.toString('utf8'));
+      if (typeof data === 'string' && data.startsWith("{")) {
         if (data === 'REFRESH_PRICES') {
           this.getPrices();
         }        
+        console.log('------', );
+        let parsedData;
+        try {
+          parsedData = JSON.parse(data)
+        } catch (error) {
+          console.warn('Unable to parse data from WS Server', error)
+        }
+        if (parsedData) {
+          if (
+            parsedData.message &&
+            parsedData.message === 'ASSET_PRICE_UPDATED'
+          ) {
+            console.log('Fetching new price')
+            this.getPrices();
+            // const ava
+            // (parsedData.data || []).filter((assetPrice) => {
+            //   return this.allPriceSymbols.includes(assetPrice);
+            //   // if (this.allPriceSymbols.includes(assetPrice)) {
+            //   //   this.prices.find((obj) => obj.symbol === assetPrice.symbol)
+            //   // }
+            // })
+          }
+        }
       }
     }
   }

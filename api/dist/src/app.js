@@ -16,7 +16,7 @@ const assetPrices_module_1 = require("./assetPrices/assetPrices.module");
 const fastify_decorators_1 = require("fastify-decorators");
 const fastify_schedule_1 = require("fastify-schedule");
 const assets_module_1 = require("./assets/assets.module");
-const toad_scheduler_1 = require("toad-scheduler");
+const AssetPriceRefreshScheduler_1 = require("./schedulers/AssetPriceRefreshScheduler");
 const Ajv = require('ajv').default;
 const AjvErrors = require('ajv-errors');
 exports.appModules = [
@@ -44,7 +44,25 @@ function build(appOptions = {}) {
         options: { maxPayload: 1048576 }
     });
     server.register(fastify_decorators_1.bootstrap, {
-        controllers
+        controllers: [
+            ...controllers,
+            AssetPriceRefreshScheduler_1.default
+        ],
+    });
+    server.register(require('fastify-cors'), () => (req, callback) => {
+        let corsOptions;
+        const origin = req.headers.origin;
+        if (!origin) {
+            return;
+        }
+        const hostname = new URL(origin).hostname;
+        if (hostname === 'localhost') {
+            corsOptions = { origin: false };
+        }
+        else {
+            corsOptions = { origin: true };
+        }
+        callback(null, corsOptions);
     });
     server.get('/health', {}, () => __awaiter(this, void 0, void 0, function* () {
         return { pong: 'it worked!' };
@@ -56,33 +74,14 @@ function build(appOptions = {}) {
             reply.send({ hello: 'world' });
         },
         wsHandler: (conn) => {
-            conn.setEncoding('utf8');
-            conn.write('hello client');
-            conn.once('data', () => {
-                conn.end();
+            conn.socket.send(`Hello client - You are connected to Server successfully`);
+            conn.socket.on("message", (message) => {
+                conn.socket.send(`We see your message but can't handle it at the moment ... ("${message}")`);
             });
         }
     });
     server.register(fastify_schedule_1.fastifySchedule);
-    const task = new toad_scheduler_1.AsyncTask('simple task', () => __awaiter(this, void 0, void 0, function* () {
-        const result = (yield server.inject({
-            method: 'POST',
-            url: '/price',
-            payload: {
-                from: ['BTC', 'LINK', 'MKR', 'USD', 'EUR', 'ETH', 'LTC'],
-                to: []
-            }
-        })).json();
-        console.info(`(${result.length}) PRICE(S) UPDATED !!!!!!!!!!!`);
-        return Promise.resolve();
-    }), (err) => { console.error(err); });
-    const job = new toad_scheduler_1.SimpleIntervalJob({ seconds: 60, }, task);
-    server.ready().then(() => {
-        console.log('fastify.ready(), successfully booted!');
-        server.scheduler.addSimpleIntervalJob(job);
-    }, (err) => {
-        console.log('an error happened', err);
-    });
+    (new AssetPriceRefreshScheduler_1.default()).start(server);
     return server;
 }
 exports.default = build;

@@ -26,7 +26,7 @@ module.exports = () => __awaiter(this, void 0, void 0, function* () {
             yield client.query(`DROP DATABASE IF EXISTS ${dbname};`);
             yield client.query(`CREATE DATABASE ${dbname};`);
             console.log(`${dbname} has been created!`);
-            const migrate = spawn('yarn', ['migration:run']);
+            const migrate = spawn('yarn', ['test:migration:run']);
             migrate.on('error', (err) => {
                 throw err;
             });

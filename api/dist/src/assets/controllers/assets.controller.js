@@ -32,7 +32,12 @@ let AssetsController = class AssetsController {
             return this.service.createOneAsset(body);
         });
     }
-    getAssetUsingSymbol({ params }) {
+    getManyAssets() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.service.getManyAssets();
+        });
+    }
+    getManyAssetUsingSymbol({ params }) {
         return __awaiter(this, void 0, void 0, function* () {
             return { params };
         });
@@ -49,11 +54,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AssetsController.prototype, "createOne", null);
 __decorate([
+    fastify_decorators_1.GET('/'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AssetsController.prototype, "getManyAssets", null);
+__decorate([
     fastify_decorators_1.GET('/:symbol'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], AssetsController.prototype, "getAssetUsingSymbol", null);
+], AssetsController.prototype, "getManyAssetUsingSymbol", null);
 AssetsController = __decorate([
     fastify_decorators_1.Controller({ route: '/assets' }),
     __metadata("design:paramtypes", [assets_service_1.AssetsService])

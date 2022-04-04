@@ -56,9 +56,9 @@ let AssetPricesService = class AssetPricesService {
             return this.repository.find(options);
         });
     }
-    syncAndUpdateAssetPrices(fromSymbols, toSymbols) {
+    syncAndUpdateAssetPrices(fromSymbols, toSymbols = []) {
         return __awaiter(this, void 0, void 0, function* () {
-            let output;
+            let output = [];
             if (!this.isSyncing) {
                 this.isSyncing = true;
                 const now = new Date().getTime();

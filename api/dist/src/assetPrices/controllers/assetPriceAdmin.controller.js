@@ -30,11 +30,6 @@ let AssetPriceAdminController = class AssetPriceAdminController {
             return this.service.fetchAndUpdateAssetPrices(query.fsyms, query.tsyms);
         });
     }
-    syncAssetPrices({ body }) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.service.syncAndUpdateAssetPrices(body.from, body.to);
-        });
-    }
 };
 __decorate([
     fastify_decorators_1.GET('/'),
@@ -42,12 +37,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AssetPriceAdminController.prototype, "getAssetPrices", null);
-__decorate([
-    fastify_decorators_1.POST('/'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AssetPriceAdminController.prototype, "syncAssetPrices", null);
 AssetPriceAdminController = __decorate([
     fastify_decorators_1.Controller({ route: '/price' }),
     __metadata("design:paramtypes", [assetPrices_service_1.AssetPricesService])

@@ -20,6 +20,10 @@ export default (): IConfig => {
       namingStrategy: new SnakeNamingStrategy(),
       seeds: [`src/db/seeds/**/*.seed.ts`],
     },
+    allowedAssetSymbols: (process.env.ALLOWED_ASSET_SYMBOLS || 'btc')
+      .split(',')
+      .map((str) => str.trim()),
+    priceRefreshDelayInSecond: parseInt(process.env.PRICE_REFRESH_DELAY_IN_SECOND || '10', 10),
   };
 
   if (process.env.TESTING) {

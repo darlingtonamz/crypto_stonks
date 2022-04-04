@@ -26,4 +26,6 @@ export interface IConfig {
   environment?: string;
   port: number;
   database: IDatabaseConfig;
+  allowedAssetSymbols: string[];
+  priceRefreshDelayInSecond: number;
 }

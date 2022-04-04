@@ -59,6 +59,11 @@ let AssetsService = class AssetsService {
             return this.repository.save(this.repository.merge(new asset_entity_1.AssetEntity(), body));
         });
     }
+    getManyAssets() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.repository.find();
+        });
+    }
     getAssetsBySymbols(symbols) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.repository.find({

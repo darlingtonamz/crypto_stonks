@@ -48,7 +48,7 @@ export class AssetPricesService {
 
   public async syncAndUpdateAssetPrices(
     fromSymbols: string[],
-    toSymbols: string[],
+    toSymbols: string[] = [],
   ): Promise<AssetPriceEntity[]> {
     let output: AssetPriceEntity[] = [];
   
@@ -101,6 +101,8 @@ export class AssetPricesService {
       }
       this.isSyncing = false;
     }
+    // console.log('########### 1', { output })
+
 
     return output
   }

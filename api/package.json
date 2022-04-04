@@ -17,7 +17,8 @@
     "migration:generate": "yarn run prebuild; yarn run build; ./node_modules/typeorm/cli.js migration:generate",
     "test": "TESTING=true node --max-old-space-size=4096 ./node_modules/.bin/jest --runInBand --logHeapUsage --forceExit",
     "test:e2e": "TESTING=true jest --runInBand --forceExit --logHeapUsage --config=jest.e2e.config.js --no-cache",
-    "test:unit": "TESTING=true jest --runInBand --forceExit --logHeapUsage --config=jest.unit.config.js"
+    "test:unit": "TESTING=true jest --runInBand --forceExit --logHeapUsage --config=jest.unit.config.js",
+    "test:migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
   },
   "dependencies": {
     "@types/jest": "^26.0.23",

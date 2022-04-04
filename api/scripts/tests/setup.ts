@@ -21,7 +21,7 @@ module.exports = async () => {
       await client.query(`CREATE DATABASE ${dbname};`);
       console.log(`${dbname} has been created!`);
 
-      const migrate = spawn('yarn', ['migration:run']);
+      const migrate = spawn('yarn', ['test:migration:run']);
       migrate.on('error', (err: any) => {
         throw err;
       });
