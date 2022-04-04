@@ -2,13 +2,7 @@ import { FindConditions, FindOneOptions, In, Repository } from 'typeorm';
 import { Initializer, Service } from 'fastify-decorators';
 import { AssetEntity } from '../entities/asset.entity';
 import { ConnectionService } from '../../db/providers/connection.service';
-// import { endOfDay, format, parse } from 'date-fns';
 import { CreateAssetDTO } from '../dtos/asset.dto';
-
-// interface IStartEndTimeString {
-//   start?: string| undefined;
-//   end?: string | undefined;
-// }
 
 @Service()
 export class AssetsService {
@@ -37,10 +31,11 @@ export class AssetsService {
   public async createOneAsset(
     body: CreateAssetDTO,
   ): Promise<AssetEntity> {
+    body.symbol = body.symbol.toUpperCase();
     const existingAsset = await this.repository.findOne({ symbol: body.symbol });
     if (existingAsset) {
       throw {
-        statusCode: 400,
+        statusCode: 422,
         message: `Asset with the same symbol (${body.symbol}) already exists`,
       }
     }
@@ -59,6 +54,20 @@ export class AssetsService {
     });
   }
 
+  public async getAssetBySymbol(symbol: string) {
+    const asset = await this.repository.findOne({
+      symbol,
+    });
+
+    if (!asset) {
+      throw {
+        statusCode: 404,
+        message: `Asset couldn't be found using symbol (${symbol})`,
+      }
+    }
+    return asset
+  }
+
   public async getAndUpsertAssetsBySymbols(symbols: string[]) {
     let assets = await this.getAssetsBySymbols(symbols);
     const foundSymbols = assets.map((asset) => asset.symbol);
@@ -68,7 +77,6 @@ export class AssetsService {
         missingSymbols.map((symbol) => this.repository.merge(new AssetEntity(), { symbol }))
       )
       assets = [...assets, ...newAssets]
-      console.log('||||||||||||', { assets })
     }
 
     return assets;

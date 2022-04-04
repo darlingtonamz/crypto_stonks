@@ -24,6 +24,7 @@ host$ > sudo nano /etc/hosts
 
 # - Add the following line to your `hosts` files
 127.0.0.1       api.stonk.local
+127.0.0.1       ui.stonk.local
 ```
 
 ## General usage
@@ -51,6 +52,8 @@ After configuring your VIRTUAL_HOST, and running `make build && make run` in the
 
 Backend app will be accessible on http://api.stonk.local or http://localhost:8080
 
+Frontend UI will be accessible on http://ui.stonk.local or http://localhost:3000
+
 To test that it is working go to <HOST>/health
 ---
 
@@ -59,7 +62,7 @@ Please checkout `api/example.http` for all the endpoints required in this exerci
 
 To use the `api/example.http` file on VSCode, please install the [Rest Client (humao.rest-client)](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension.
 
-I opted to use `UUID` instead of `integer` as a `id` reference for `[Users, Trades, and Stocks]`
+I opted to use `UUID` instead of `integer` as a `id` reference for `[Assets and AssetPrices]`
 
 
 ## Extra
@@ -78,16 +81,14 @@ I opted to use `UUID` instead of `integer` as a `id` reference for `[Users, Trad
   ```
 
 ## Things to improve on
+- Tailored Websocket message to UI clients
+- E2E Tests for AssetPrices
 - Authentication of `Users`
 - Authorization of `Users`
-- Full CRUD for all Major Entities [`Trades`, `Stock`, `Users`]
+- Full CRUD for all Major Entities [`Assets`, `AssetPrices`]
   - currently:
-    - `Trades` [Create, Read]
-    - `Users` [Create, Read]
-    - `Stocks` [Create, Read]
+    - `Assets` [Create, Read]
+    - `AssetPrices` [Read]
 - Add Linting Fix with ESLint
 - Configure testing through `make test` using proper `docker-compose.test.yml`
-- Reformating strings payloads with trailing spaces in Request.body
-- Implement a `BaseController` - To abstract some of the bloat in the current controllers
-- Unit test for the `StocksService -> getStockStats(...)`
-- On Delete User -> Cascade-Delete User Trades
+- Unit test for the `AssetPricesService -> syncAndUpdateAssetPrices(...)`

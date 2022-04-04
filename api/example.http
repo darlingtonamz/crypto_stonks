@@ -1,83 +1,33 @@
 // Set this to your current base url
-@baseUrl = http://api.stonk.local
+@baseUrl = http://api.amanze.local
 @contentType = application/json
 
-### USERS
 
-###
-# @name user
+### ASSETS
 
+# @name asset
 
-post {{baseUrl}}/users
+post {{baseUrl}}/assets
 Content-Type: {{contentType}}
 
 {
-    "name": "amanze"
+    "symbol": "BTC"
 }
 ###
-@userId = {{user.response.body.id}}
-###
-
-# @name users
-get {{baseUrl}}/users
+@assetSymbol = {{asset.response.body.symbol}}
 
 ###
 
-get {{baseUrl}}/users/{{userId}}
+get {{baseUrl}}/assets/{{assetSymbol}}
 
-### STOCKS
-
-# @name stock
-
-post {{baseUrl}}/stocks
-Content-Type: {{contentType}}
-
-{
-    "symbol": "ACMEEX"
-}
 ###
-@stockSymbol = {{stock.response.body.symbol}}
+get {{baseUrl}}/assets/BTC
 
 ###
 
-get {{baseUrl}}/stocks/{{stockSymbol}}/price?start=2014-06-14&end=2014-06-14
+get {{baseUrl}}/assets
 
 ###
+### ASSET PRICES
 
-get {{baseUrl}}/stocks/stats?start=2014-06-14&end=2014-06-14
-
-###
-### TRADES
-
-# @name stock
-
-post {{baseUrl}}/trades
-Content-Type: {{contentType}}
-
-{
-    "type": "buy",
-    "user": {
-      "id": "{{userId}}",
-      "name": "amanze"
-    },
-    "symbol": "{{stockSymbol}}",
-    "shares": 29,
-    "price": 140,
-    "timestamp": "2014-06-14 13:13:13"
-}
-###
-@tradeId = {{stock.response.body.id}}
-
-###
-
-get {{baseUrl}}/trades
-
-###
-
-get {{baseUrl}}/trades/users/{{userId}}
-
-###
-
-delete {{baseUrl}}/erase
-
-###
+get {{baseUrl}}/price?fsyms=BTC,LINK,MKR&tsyms=USD,EUR,ETH,LTC

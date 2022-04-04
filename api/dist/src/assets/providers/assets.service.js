@@ -49,10 +49,11 @@ let AssetsService = class AssetsService {
     }
     createOneAsset(body) {
         return __awaiter(this, void 0, void 0, function* () {
+            body.symbol = body.symbol.toUpperCase();
             const existingAsset = yield this.repository.findOne({ symbol: body.symbol });
             if (existingAsset) {
                 throw {
-                    statusCode: 400,
+                    statusCode: 422,
                     message: `Asset with the same symbol (${body.symbol}) already exists`,
                 };
             }
@@ -71,6 +72,20 @@ let AssetsService = class AssetsService {
             });
         });
     }
+    getAssetBySymbol(symbol) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const asset = yield this.repository.findOne({
+                symbol,
+            });
+            if (!asset) {
+                throw {
+                    statusCode: 404,
+                    message: `Asset couldn't be found using symbol (${symbol})`,
+                };
+            }
+            return asset;
+        });
+    }
     getAndUpsertAssetsBySymbols(symbols) {
         return __awaiter(this, void 0, void 0, function* () {
             let assets = yield this.getAssetsBySymbols(symbols);
@@ -79,7 +94,6 @@ let AssetsService = class AssetsService {
             if (missingSymbols && missingSymbols.length) {
                 const newAssets = yield this.repository.save(missingSymbols.map((symbol) => this.repository.merge(new asset_entity_1.AssetEntity(), { symbol })));
                 assets = [...assets, ...newAssets];
-                console.log('||||||||||||', { assets });
             }
             return assets;
         });

@@ -19,7 +19,9 @@ export class AssetsController {
     { body }: FastifyRequest<{ 'Body': CreateAssetDTO }>,
     reply: FastifyReply
   ) {
-    reply.status(201)
+    reply
+      .status(201)
+      .header('Content-Type', 'application/json')
     return this.service.createOneAsset(body);
   }
 
@@ -29,10 +31,10 @@ export class AssetsController {
   }
 
   @GET('/:symbol')
-  async getManyAssetUsingSymbol(
+  async getAssetUsingSymbol(
     { params }: FastifyRequest<{ 'Params': { symbol: string } }>
   ) {
-    return { params };
+    return this.service.getAssetBySymbol(params.symbol);
   }
 }
 

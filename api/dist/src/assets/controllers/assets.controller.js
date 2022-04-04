@@ -28,7 +28,9 @@ let AssetsController = class AssetsController {
     }
     createOne({ body }, reply) {
         return __awaiter(this, void 0, void 0, function* () {
-            reply.status(201);
+            reply
+                .status(201)
+                .header('Content-Type', 'application/json');
             return this.service.createOneAsset(body);
         });
     }
@@ -37,9 +39,9 @@ let AssetsController = class AssetsController {
             return this.service.getManyAssets();
         });
     }
-    getManyAssetUsingSymbol({ params }) {
+    getAssetUsingSymbol({ params }) {
         return __awaiter(this, void 0, void 0, function* () {
-            return { params };
+            return this.service.getAssetBySymbol(params.symbol);
         });
     }
 };
@@ -64,7 +66,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], AssetsController.prototype, "getManyAssetUsingSymbol", null);
+], AssetsController.prototype, "getAssetUsingSymbol", null);
 AssetsController = __decorate([
     fastify_decorators_1.Controller({ route: '/assets' }),
     __metadata("design:paramtypes", [assets_service_1.AssetsService])

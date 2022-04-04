@@ -15,7 +15,8 @@ describe('GET /health', () => {
         const app = yield util_1.createApp();
         const response = yield app.inject({
             method: 'GET',
-            url: '/health'
+            url: '/health',
+            headers: { origin: 'http://localhost' }
         });
         expect(response.statusCode).toBe(200);
     }));

@@ -7,7 +7,7 @@ describe('GET /health', () => {
     const response = await app.inject({
       method: 'GET',
       url: '/health',
-      headers: { origin: 'localhost' }
+      headers: { origin: 'http://localhost' }
     })
     expect(response.statusCode).toBe(200);
   });
