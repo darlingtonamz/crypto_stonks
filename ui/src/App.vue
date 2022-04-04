@@ -106,12 +106,10 @@ export default {
     getCryptoSymbols() {
       get(`http://${this.apiHost}/assets`)
       .then((res) => {
-        // console.log('###################', { res });
         this.assets = res.data;
       })
     },
     assetSelected(target) {
-      // console.log('###################', { target });
       this.selectedAsset = target
     }
   },

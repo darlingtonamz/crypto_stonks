@@ -56,7 +56,7 @@ import { get } from 'axios';
 export default {
   data() {
     return {
-      apiHost: 'api.amanze.local',
+      apiHost: process.env.API_HOST,
       prices: [],
       priceMap: {},
       isRefreshingPrices: false,
@@ -88,24 +88,12 @@ export default {
         .then((res) => {
           this.prices = res.data;
           this.isRefreshingPrices = false;
-          // this.logServerForUpdatedPrice();
         })
         .catch((error) => {
           console.error(error);
           this.isRefreshingPrices = false;
         })
     },
-    // logServerForUpdatedPrice() {
-    //   const now = new Date().getTime();
-    //   if (this.selected && (
-    //     !this.lastPriceUpdateFromServer || 
-    //     (now - this.lastPriceUpdateFromServer)/1000 > 3
-    //   )) {
-    //     // this.lastPriceUpdateFromServer = now;
-    //     console.log('SENDIONG')
-    //     this.socket.send(`HAS_UPDATE_FOR|${this.selected.symbol}`)
-    //   }
-    // }
   },
   mounted() {
     console.log(`The initial count is ${this.count}.`)
@@ -130,13 +118,6 @@ export default {
           ) {
             console.log('Fetching new price')
             this.getPrices();
-            // const ava
-            // (parsedData.data || []).filter((assetPrice) => {
-            //   return this.allPriceSymbols.includes(assetPrice);
-            //   // if (this.allPriceSymbols.includes(assetPrice)) {
-            //   //   this.prices.find((obj) => obj.symbol === assetPrice.symbol)
-            //   // }
-            // })
           }
         }
       }

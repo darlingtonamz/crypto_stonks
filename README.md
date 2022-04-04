@@ -81,6 +81,8 @@ I opted to use `UUID` instead of `integer` as a `id` reference for `[Assets and 
   ```
 
 ## Things to improve on
+- Allow Multiselect of Assets in Frontend
+- Add Frontent UI Tests, using Cypress and/or VueTest
 - Tailored Websocket message to UI clients
 - E2E Tests for AssetPrices
 - Authentication of `Users`
