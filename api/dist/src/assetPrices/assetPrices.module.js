@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AssetPricesModule = void 0;
-const assetPriceAdmin_controller_1 = require("./controllers/assetPriceAdmin.controller");
+const assetPrices_controller_1 = require("./controllers/assetPrices.controller");
 exports.AssetPricesModule = {
     controllers: [
-        assetPriceAdmin_controller_1.AssetPriceAdminController,
+        assetPrices_controller_1.AssetPricesController,
     ],
 };
 //# sourceMappingURL=assetPrices.module.js.map

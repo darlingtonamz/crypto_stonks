@@ -1,1 +1,1 @@
-{"version":3,"file":"assetPrices.module.js","sourceRoot":"","sources":["../../../src/assetPrices/assetPrices.module.ts"],"names":[],"mappings":";;;AAEA,yFAAqF;AAExE,QAAA,iBAAiB,GAAe;IAC3C,WAAW,EAAE;QAEX,sDAAyB;KAC1B;CACF,CAAC"}
+{"version":3,"file":"assetPrices.module.js","sourceRoot":"","sources":["../../../src/assetPrices/assetPrices.module.ts"],"names":[],"mappings":";;;AAEA,iFAA6E;AAEhE,QAAA,iBAAiB,GAAe;IAC3C,WAAW,EAAE;QACX,8CAAqB;KACtB;CACF,CAAC"}

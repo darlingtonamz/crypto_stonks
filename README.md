@@ -1,4 +1,5 @@
 # Stonk Project
+![Promo Image](./promo.png "Stonks preview")
 ## Dependencies
 - [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 - [Docker-Compose](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-18-04)
@@ -55,7 +56,8 @@ Backend app will be accessible on http://api.stonk.local or http://localhost:808
 
 Frontend UI will be accessible on http://ui.stonk.local or http://localhost:3000
 
-To test that it is working go to <HOST>/health
+To test that it is working go to `[HOST]/health`
+
 ---
 
 # Usage
@@ -81,6 +83,14 @@ I opted to use `UUID` instead of `integer` as a `id` reference for `[Assets and 
   /app # yarn run test
   ```
 
+## Things currently
+- API - Asset Auto Populate
+- API - Scheduler refresh of prices
+- API - Enpoints to supply Assets and Prices
+- API - Caching of Prices in DB
+- UI - Asset Toogle and Preview
+- UI - Price Preview based on selected Asset
+- UI - Auto refresh on WebSocket update
 ## Things to improve on
 - Allow Multiselect of Assets in Frontend
 - Add Frontent UI Tests, using Cypress and/or VueTest
@@ -96,3 +106,5 @@ I opted to use `UUID` instead of `integer` as a `id` reference for `[Assets and 
 - Script to inject API_HOST into UI .env file
 - Configure testing through `make test` using proper `docker-compose.test.yml`
 - Unit test for the `AssetPricesService -> syncAndUpdateAssetPrices(...)`
+- Clean up missed boilerplate code
+- Add more inline documentation

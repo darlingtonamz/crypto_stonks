@@ -1,6 +1,5 @@
 import {
   FastifyReply, FastifyRequest,
-  // FastifyRequest
 } from 'fastify';
 import { Controller, GET, POST } from 'fastify-decorators';
 import { CreateAssetDTO, CreateAssetSchema } from '../dtos/asset.dto';
