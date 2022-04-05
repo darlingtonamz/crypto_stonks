@@ -13,10 +13,10 @@ services:
     networks:
       default:
         aliases:
-          - api.amanze.local
+          - api.stonk.local
       proxy:
         aliases:
-          - api.amanze.local
+          - api.stonk.local
     restart: always
     depends_on:
       - database
@@ -37,7 +37,7 @@ services:
       DB_PORT: 5432
       DB_USER: platform-api
       DB_DATABASE: platform-api
-      VIRTUAL_HOST: api.amanze.local
+      VIRTUAL_HOST: api.stonk.local
       DB_PASSWORD: database_password
       APP_KEY: random_128_bit_string
 
@@ -57,13 +57,13 @@ services:
     networks:
       default:
         aliases:
-          - ui.amanze.local
+          - ui.stonk.local
       proxy:
         aliases:
-          - ui.amanze.local
+          - ui.stonk.local
     environment:
       VIRTUAL_PORT: 3000
-      VIRTUAL_HOST: ui.amanze.local
+      VIRTUAL_HOST: ui.stonk.local
       VUE_APP_ENVIRONMENT: local
 
   database:
@@ -85,7 +85,7 @@ services:
       POSTGRES_DB: platform-api
       POSTGRES_USER: platform-api      
       POSTGRES_PASSWORD: database_password
-      API_HOST: ui.amanze.local
+      API_HOST: ui.stonk.local
 
 networks:
   proxy:

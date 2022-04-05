@@ -31,6 +31,7 @@ host$ > sudo nano /etc/hosts
 
 ### Project
 * Create a copy of `secret.yml.example` and rename it to `secret.yml`
+* Please confirm that `ui/src/main.js => API_HOST` points to the same api host.
 * Run `make build`
   * The image is built and stored locally
 * Run `make run`
@@ -92,5 +93,6 @@ I opted to use `UUID` instead of `integer` as a `id` reference for `[Assets and 
     - `Assets` [Create, Read]
     - `AssetPrices` [Read]
 - Add Linting Fix with ESLint
+- Script to inject API_HOST into UI .env file
 - Configure testing through `make test` using proper `docker-compose.test.yml`
 - Unit test for the `AssetPricesService -> syncAndUpdateAssetPrices(...)`

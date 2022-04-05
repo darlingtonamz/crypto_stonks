@@ -18,7 +18,7 @@ export class AssetPricesService {
   private lastSynced: number;
   
   @Inject(AssetsService)
-  private assetsService!: AssetsService;
+  public assetsService!: AssetsService;
 
   constructor(private connectionService: ConnectionService) {}
 
@@ -80,7 +80,7 @@ export class AssetPricesService {
         const result = await axios.get(url);
         const assetsMap: IAssetMap = result.data.RAW;
         const assetPriceMap: IAssetPriceMap = {};
-        // console.log('%%%%%%%%%%%', { assetsMap, url })
+
         Object.keys(assetsMap).forEach((fromAssetKey: string) => {
           const fromAssetMap = assetsMap[fromAssetKey];
           return Object.keys(fromAssetMap).forEach((toAssetKey: string) => {
@@ -88,7 +88,7 @@ export class AssetPricesService {
             assetPriceMap[`${fromAssetKey}-${toAssetKey}`] = toAssetMap.PRICE;
           });
         });
-        // console.log({ url, assetPriceMap, result: result.data })
+
         await this.cacheAssetPrices(assetPriceMap);
         output = await this.getManyAssetPrices({
           where: {
@@ -101,8 +101,6 @@ export class AssetPricesService {
       }
       this.isSyncing = false;
     }
-    // console.log('########### 1', { output })
-
 
     return output
   }
@@ -149,7 +147,6 @@ export class AssetPricesService {
         `'${fromKey}|${toKey}|${price}'`
       );
     });
-
     await this.assetsService.getAndUpsertAssetsBySymbols(symbols);
     await this.repository.query(`
       INSERT into asset_prices(symbol, "from", "to", price)

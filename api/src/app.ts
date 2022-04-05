@@ -59,13 +59,12 @@ function build(appOptions={}) {
     const origin = req.headers.origin as string;
 
     if (!origin) {
-      // temporarily allow no origin this because of api/example.http
+      // for headless clients [postman, example.http]
       corsOptions = { origin: false }
-      // return;
     } else {
       const hostname = new URL(origin).hostname;
   
-      if(hostname === 'localhost'){
+      if (hostname === 'localhost'){
         corsOptions = { origin: false }
       } else {
         corsOptions = { origin: true }

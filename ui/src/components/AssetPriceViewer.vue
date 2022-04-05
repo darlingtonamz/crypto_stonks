@@ -56,7 +56,7 @@ import { get } from 'axios';
 export default {
   data() {
     return {
-      apiHost: process.env.API_HOST,
+      apiHost: this.API_HOST,
       prices: [],
       priceMap: {},
       isRefreshingPrices: false,

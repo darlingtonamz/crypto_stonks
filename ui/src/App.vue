@@ -97,7 +97,7 @@ import { get } from 'axios';
 export default {
   data() {
     return {
-      apiHost: 'api.amanze.local',
+      apiHost: this.API_HOST,
       assets: [],
       selectedAsset: null,
     }

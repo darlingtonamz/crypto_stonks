@@ -53,14 +53,16 @@ function build(appOptions = {}) {
         let corsOptions;
         const origin = req.headers.origin;
         if (!origin) {
-            return;
-        }
-        const hostname = new URL(origin).hostname;
-        if (hostname === 'localhost') {
             corsOptions = { origin: false };
         }
         else {
-            corsOptions = { origin: true };
+            const hostname = new URL(origin).hostname;
+            if (hostname === 'localhost') {
+                corsOptions = { origin: false };
+            }
+            else {
+                corsOptions = { origin: true };
+            }
         }
         callback(null, corsOptions);
     });

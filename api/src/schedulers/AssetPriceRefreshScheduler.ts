@@ -14,17 +14,12 @@ class AssetPriceRefreshScheduler {
 
   constructor() {
     if (!AssetPriceRefreshScheduler._instance) {
-      // this.server = server
       AssetPriceRefreshScheduler._instance = this;
-      // console.log('########### 1', { allowedAssetSymbols })
     } else {
-      // console.log('########### 2')
       return AssetPriceRefreshScheduler._instance;
     }
   }
   private static _instance: AssetPriceRefreshScheduler;
-
-  // private server: FastifyInstance;
 
   public pricesUpdatedAt: number;
 
@@ -40,7 +35,7 @@ class AssetPriceRefreshScheduler {
   
             this.pricesUpdatedAt = new Date().getTime();
             console.info(`(${result.length}) PRICE(S) UPDATED !!!!!!!!!!!`);
-            // const pricesText
+
             server.websocketServer.clients.forEach((client: WebSocket) => {
               if (client.readyState === 1) {
                 client.send(JSON.stringify({

@@ -23,7 +23,7 @@ services:
       retries: 5
       start_period: 15s
     environment:
-      VIRTUAL_HOST: api.amanze.local
+      VIRTUAL_HOST: api.stonk.local
       # VIRTUAL_PORT: 80
       HOST: 0.0.0.0
       PORT: 80

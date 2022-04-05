@@ -4,7 +4,7 @@ import {
   createApp
 } from "../util";
 import { getConnection } from 'typeorm';
-import { AssetEntity } from 'src/assets/entities/asset.entity';
+import { AssetEntity } from '../../src/assets/entities/asset.entity';
 
 describe('Assets module', () => {
   let app: FastifyInstance;

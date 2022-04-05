@@ -1,6 +1,6 @@
 import { FastifyRequest } from 'fastify';
-import { Controller, GET,
-  // POST
+import {
+  Controller, GET,
 } from 'fastify-decorators';
 import { AssetPricesService } from '../providers/assetPrices.service';
 
@@ -19,16 +19,6 @@ export class AssetPriceAdminController {
   ) {
     return this.service.fetchAndUpdateAssetPrices(query.fsyms as any, query.tsyms)
   }
-  
-  // @POST('/')
-  // async syncAssetPrices(
-  //   { body }: FastifyRequest<{
-  //     'Body': { from: string[], to?: string[] }
-  //   }>
-  // ) {
-  //   // console.log('########### 1', { body })
-  //   return this.service.syncAndUpdateAssetPrices(body.from, body.to)
-  // }
 }
 
 export default AssetPriceAdminController;

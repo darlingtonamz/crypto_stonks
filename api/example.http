@@ -1,5 +1,5 @@
 // Set this to your current base url
-@baseUrl = http://api.amanze.local
+@baseUrl = http://api.stonk.local
 @contentType = application/json
 
 
