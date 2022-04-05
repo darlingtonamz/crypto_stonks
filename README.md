@@ -1,5 +1,5 @@
 # Stonk Project
-![Promo Image](promo.png "Stonks preview")
+![Promo Image - Stonks preview](promo.png "Stonks preview")
 ## Dependencies
 - [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 - [Docker-Compose](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-18-04)
