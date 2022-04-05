@@ -79,7 +79,7 @@ I opted to use `UUID` instead of `integer` as a `id` reference for `[Assets and 
   # from project-root directory
   
   host $ make connect service=api
-  /app # yarn run migration:run
+  /app # yarn run migration:run (ONCE)
   /app # yarn run test
   ```
 
